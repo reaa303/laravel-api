@@ -1,4 +1,4 @@
-# Laravel API - Assessment System (CP Done!)
+# Laravel API - Assessment System 
 
 ## E2 - Assessment Feature
 - /products/create - Add Assessment Form
@@ -16,5 +16,3 @@ function esc(t){
  return d.innerHTML;
 }
 el.textContent = p.name
-let limit=10;
-fetch(`/api/products?page=${page}&limit=${limit}`)
