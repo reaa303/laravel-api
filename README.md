@@ -1,4 +1,4 @@
-# Laravel API - Assessment System 
+# Laravel API - Assessment System
 
 ## E2 - Assessment Feature
 - /products/create - Add Assessment Form
@@ -8,7 +8,7 @@
 ## E3 - XSS Protection - PASSED
 **Test Input:** `<b>LAB_TEST</b>`
 
-**Code na gamit ko:**
+**Code Used:**
 ```js
 function esc(t){
  let d=document.createElement('div');
@@ -18,19 +18,17 @@ function esc(t){
 el.textContent = p.name
 ```
 
-**Result:** Lumabas as plain text, hindi bold. Safe kasi textContent gamit hindi innerHTML.
+**Result:** Displayed as plain text, not bold. Safe because textContent is used instead of innerHTML.
 
 ## E4 - Performance - PASSED
 ```js
 let limit=10;
 fetch(`/api/products?page=${page}&limit=${limit}`)
 ```
-- 10 lang per page
-- May Prev/Next button
-- Mabilis, hindi niloload lahat
+- Only 10 items per page
+- Has Prev/Next buttons
+- Fast loading, not loading all data
 
-## Proof Screenshots
-- index.blade.php - may pagination at textContent
-- create.blade.php - may esc() at textContent
-
-**Gawa sa CP lang pero working E2 E3 E4!**
+## Proof
+- index.blade.php - pagination + textContent implementation
+- create.blade.php - esc() + textContent implementation
