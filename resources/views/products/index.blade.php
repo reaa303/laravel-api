@@ -1,25 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>Add Assessment</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Product List Dashboard</title>
-<style>
- body{font-family:system-ui; padding:16px; background:#f3f4f6}
- #list{min-height:200px; background:#fff; padding:16px; border-radius:8px}
- li{padding:8px; border-bottom:1px solid #eee}
-</style>
+<style>body{font-family:Arial;padding:10px} input,button{width:100%;height:40px;margin:5px 0}</style>
 </head>
 <body>
-<h1>Product List Dashboard</h1>
-<a href="/ui/create">+ Add Product</a>
-<ul id="list"></ul>
+<h2>Add Assessment</h2>
+<form id="form">
+<input id="name" placeholder="Student Name - try <b>LAB_TEST</b>" required>
+<input id="subject" placeholder="Subject" required>
+<input id="grade" placeholder="Grade" required>
+<button type="submit">Save</button>
+</form>
+<a href="/products"><button>Back to List</button></a>
+<div id="msg"></div>
+
 <script>
-fetch('/api/products').then(r=>r.json()).then(products=>{
- const list=document.getElementById('list');
- products.forEach(p=>{
-  const el=document.createElement('li');
-  el.textContent = p.name + ' - ' + p.price;
-  list.appendChild(el);
+// E3 XSS Protection
+function esc(t){
+ let d=document.createElement('div');
+ d.textContent=t;
+ return d.innerHTML;
+}
+
+document.getElementById('form').addEventListener('submit', function(e){
+ e.preventDefault();
+ let data = {
+   name: document.getElementById('name').value,
+   subject: document.getElementById('subject').value,
+   grade: document.getElementById('grade').value
+ };
+ 
+ fetch('/api/products',{
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body: JSON.stringify(data)
+ }).then(r=>r.json()).then(res=>{
+   // SAFE - textContent gamit
+   let msg = document.getElementById('msg');
+   msg.textContent = 'Saved: ' + data.name;
+   document.getElementById('form').reset();
  });
 });
 </script>
