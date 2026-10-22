@@ -3,7 +3,10 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 class ProductController extends Controller {
-    public function index(){ return Product::all(); }
+    public function index(Request $request){
+        $limit = $request->query('limit', 10);
+        return Product::paginate($limit);
+    }
     public function store(Request $request){
         $data = $request->validate([
             'name'=>'required|string',
