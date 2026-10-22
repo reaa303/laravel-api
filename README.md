@@ -16,3 +16,21 @@ function esc(t){
  return d.innerHTML;
 }
 el.textContent = p.name
+```
+
+**Result:** Lumabas as plain text, hindi bold. Safe kasi textContent gamit hindi innerHTML.
+
+## E4 - Performance - PASSED
+```js
+let limit=10;
+fetch(`/api/products?page=${page}&limit=${limit}`)
+```
+- 10 lang per page
+- May Prev/Next button
+- Mabilis, hindi niloload lahat
+
+## Proof Screenshots
+- index.blade.php - may pagination at textContent
+- create.blade.php - may esc() at textContent
+
+**Gawa sa CP lang pero working E2 E3 E4!**
