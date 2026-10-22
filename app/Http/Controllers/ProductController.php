@@ -9,10 +9,10 @@ class ProductController extends Controller {
     }
     public function store(Request $request){
         $data = $request->validate([
-            'name'=>'required|string',
-            'price'=>'required|numeric',
-            'description'=>'nullable|string'
-        ]);
+    'name'=>'required|string|min:3',
+    'price'=>'required|numeric|min:0|max:100',
+    'description'=>'nullable|string|max:255'
+]);
         $product = Product::create($data);
         return response()->json($product, 201);
     }
