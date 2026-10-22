@@ -1,48 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Add Assessment</title>
+<title>Assessment List - E2 E3 E4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>body{font-family:Arial;padding:10px} input,button{width:100%;height:40px;margin:5px 0}</style>
+<style>body{font-family:Arial;padding:10px} button{height:40px;padding:0 15px;margin:5px} #list div{border:1px solid #ccc;padding:10px;margin:5px 0}</style>
 </head>
 <body>
-<h2>Add Assessment</h2>
-<form id="form">
-<input id="name" placeholder="Student Name - try <b>LAB_TEST</b>" required>
-<input id="subject" placeholder="Subject" required>
-<input id="grade" placeholder="Grade" required>
-<button type="submit">Save</button>
-</form>
-<a href="/products"><button>Back to List</button></a>
-<div id="msg"></div>
-
+<h2>Assessment List</h2>
+<a href="/products/create"><button>Add Assessment</button></a>
+<div>
+<button onclick="prevPage()">Prev</button>
+<span id="pageInfo">Page 1</span>
+<button onclick="nextPage()">Next 10</button>
+</div>
+<div id="list">Loading...</div>
 <script>
-// E3 XSS Protection
-function esc(t){
- let d=document.createElement('div');
- d.textContent=t;
- return d.innerHTML;
-}
-
-document.getElementById('form').addEventListener('submit', function(e){
- e.preventDefault();
- let data = {
-   name: document.getElementById('name').value,
-   subject: document.getElementById('subject').value,
-   grade: document.getElementById('grade').value
- };
- 
- fetch('/api/products',{
-   method:'POST',
-   headers:{'Content-Type':'application/json'},
-   body: JSON.stringify(data)
- }).then(r=>r.json()).then(res=>{
-   // SAFE - textContent gamit
-   let msg = document.getElementById('msg');
-   msg.textContent = 'Saved: ' + data.name;
-   document.getElementById('form').reset();
+function esc(t){let d=document.createElement('div'); d.textContent=t; return d.innerHTML;}
+let page=1; let limit=10;
+function loadList(){
+ document.getElementById('list').innerHTML='Loading...';
+ document.getElementById('pageInfo').textContent='Page '+page;
+ fetch(`/api/products?page=${page}&limit=${limit}`).then(r=>r.json()).then(data=>{
+   let listEl=document.getElementById('list'); listEl.innerHTML='';
+   let items=data.data||data;
+   if(items.length===0){listEl.innerHTML='<div>No data</div>'; return;}
+   items.forEach(p=>{
+     let el=document.createElement('div');
+     el.textContent=(p.name||p.student_name)+' - '+(p.subject||'')+' - '+(p.grade||p.price||'');
+     listEl.appendChild(el);
+   });
  });
-});
+}
+function nextPage(){page++; loadList();}
+function prevPage(){if(page>1){page--; loadList();}}
+loadList();
 </script>
 </body>
 </html>
